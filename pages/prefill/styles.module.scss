@@ -1,0 +1,33 @@
+.prefillContainer {
+  padding: 12px;
+  margin: 12px;
+  min-height: 80vh;
+}
+
+.prefillInput {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+}
+
+.prefilledTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+}
+
+.generatedContainer {
+  margin-top: 30px;
+}
+
+.generatedPreTag {
+  border: 2px solid lightgray;
+  padding: 12px;
+  border-radius: 12px;
+}
