@@ -11,6 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (process.env.OPEN_AI_API_TOKEN) {
     return res.status(200).json({ data: true });
   } else {
-    return res.status(500).json({ error: 'No OPEN_AI_API_TOKEN found' });
+    return res.status(200).json({ data: false });
   }
 }

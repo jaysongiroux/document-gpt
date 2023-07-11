@@ -1,13 +1,13 @@
 import React from 'react';
-import { Autocomplete, Button, TextField, Typography } from '../../lib/frontend/mui';
+import { Autocomplete, Button, IconButton, TextField, Typography } from '../../lib/frontend/mui';
 import { fetchAPI } from '../../lib/frontend/fetchAPI';
-import styles from './styles.module.scss';
 import { uid } from 'uid';
 import SelectAndFetchDocumentContent from '@/components/SelectAndFetchDocumentContent';
-import { Add, Send } from '@mui/icons-material';
+import { Add, Delete, Send, Info, Check } from '@mui/icons-material';
 import useHasToken from '@/hooks/useHasToken';
 import Token from '@/components/Token';
 import { toast } from 'react-toastify';
+import styles from './styles.module.scss';
 
 type Props = {};
 
@@ -49,7 +49,8 @@ const types = [
 ];
 
 const promptDefault = 'given the following OCR text, create a JSON object that Is constructed as: ';
-const additionalPrompt = '  Do not include any additional information that is not asked for';
+const additionalPrompt =
+  '  Do not include any additional information that is not asked for. If you dont know the answer, mark it as null';
 
 export default function Prefill({}: Props) {
   const [ocrText, setOcrText] = React.useState<string | null>(null);
@@ -59,12 +60,14 @@ export default function Prefill({}: Props) {
   const [generatedJSON, setGeneratedJSON] = React.useState<object | null>(null);
   const { hasToken, setHasToken, systemHasToken } = useHasToken();
   const [token, setToken] = React.useState<string | null>(null);
+  const [ocrLoading, setOcrLoading] = React.useState<boolean>(false);
 
   const handleTranslate = async (submittedFile: File) => {
     if (!submittedFile) return;
     // get OCR Raw text from API POST /api/ocr using axios
     const formData = new FormData();
     formData.append('file', submittedFile);
+    setOcrLoading(true);
     fetchAPI({
       method: 'POST',
       url: '/api/ocr',
@@ -78,6 +81,9 @@ export default function Prefill({}: Props) {
       })
       .catch((error) => {
         toast.error('Error getting OCR text');
+      })
+      .finally(() => {
+        setOcrLoading(false);
       });
   };
 
@@ -179,18 +185,26 @@ export default function Prefill({}: Props) {
         Upload a photo and ask it to generate a JSON object based on the fields you request
       </Typography>
       <div className={'appHeader'}>
-        <Typography variant="h4">1. Upload an image</Typography>
-        <SelectAndFetchDocumentContent handleSelect={handleSelect} ocrText={ocrText} file={file} />
+        <Typography variant="h4">Upload an image</Typography>
+        <SelectAndFetchDocumentContent
+          handleSelect={handleSelect}
+          ocrText={ocrText}
+          file={file}
+          ocrLoading={ocrLoading}
+        />
       </div>
 
       {ocrText && (
         <section className={styles.prefilledTextContainer}>
-          <Typography variant="h4">2. Prefill Fields</Typography>
+          <Typography variant="h4">Prefill Fields</Typography>
           <Typography variant="body1">Add the fields and their corresponding type that you want generated</Typography>
           {prefillList?.length > 0 && (
-            <Typography variant="body2">
-              <strong>Prompt: </strong>
-              {wholePrompt}
+            <Typography variant="body2" className={styles.promptContainer}>
+              <Info />
+              <span>
+                <strong>Prompt: </strong>
+                {wholePrompt}
+              </span>
             </Typography>
           )}
           {prefillList.map((item, index) => {
@@ -205,24 +219,27 @@ export default function Prefill({}: Props) {
                 />
                 <Autocomplete
                   options={types}
-                  // TODO: fix this typing issue
                   value={item.type as any}
                   className={styles.inputField}
                   onChange={(e, value) => handleChange('type', value?.value, item.uid)}
                   renderInput={(params) => <TextField name="type" {...params} label="Type" />}
                 />
-                <Button onClick={() => removeField(item.uid)}>Remove</Button>
+                <IconButton onClick={() => removeField(item.uid)} className={styles.deleteButton}>
+                  <Delete />
+                </IconButton>
               </div>
             );
           })}
-          <Button onClick={addField}>
-            Add Field
-            <Add />
-          </Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={prefillList?.length <= 0}>
-            Submit
-            <Send sx={{ paddingLeft: 1 }} />
-          </Button>
+          <div className={styles.actionButtonContainer}>
+            <Button onClick={addField} variant="outlined">
+              Add Field
+              <Add />
+            </Button>
+            <Button variant="contained" onClick={handleSubmit} disabled={prefillList?.length <= 0}>
+              Submit
+              <Send sx={{ paddingLeft: 1 }} />
+            </Button>
+          </div>
         </section>
       )}
 
@@ -233,7 +250,7 @@ export default function Prefill({}: Props) {
             Below is the generated JSON Data given the image, and fields from above
           </Typography>
           <pre className={styles.generatedPreTag}>{JSON.stringify(generatedJSON, null, 2)}</pre>
-          <div>Valid JSON Object: {isValidJSON(generatedJSON)}</div>
+          <Typography variant="h6">Valid JSON Object: {isValidJSON(generatedJSON)}</Typography>
         </div>
       )}
     </div>

@@ -9,7 +9,9 @@ export default function Navbar({}: Props) {
   return (
     <div className={styles.navbarContainer}>
       <Link href="/">
-        <Typography variant="h4">Document GPT</Typography>
+        <Typography variant="h4" className={styles.navbarHeader}>
+          Document GPT
+        </Typography>
       </Link>
       <ul className={styles.navBarList}>
         <li>

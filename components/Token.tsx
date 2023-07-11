@@ -1,7 +1,8 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import React from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
+import { Check } from '@mui/icons-material';
 
 type TokenProps = {
   setToken: (token: string) => void;
@@ -15,7 +16,10 @@ const Token = (props: TokenProps) => {
   if (props.hasToken) {
     return (
       <div className={styles.hasTokenTrue}>
-        <Typography variant="h6">OpenAI API Token</Typography>
+        <Typography variant="h6" className={styles.hasCheck}>
+          <Check className={styles.check}/>
+          OpenAI API Token
+        </Typography>
         <Typography variant="body2">
           This system already has a token set. Would you like to override it?{' '}
           <Link onClick={() => props.setHasToken(false)} href="">

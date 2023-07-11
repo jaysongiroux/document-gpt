@@ -26,7 +26,7 @@ export default function Chat({}: Props) {
   const [chatLoading, setChatLoading] = React.useState<boolean>(false);
   const { hasToken, setHasToken, systemHasToken } = useHasToken();
   const [token, setToken] = React.useState<string | null>(null);
-
+  const [ocrLoading, setOcrLoading] = React.useState<boolean>(false);
   const chatRef = React.useRef<any>(null);
 
   const handleTranslate = async (submittedFile: File) => {
@@ -34,6 +34,7 @@ export default function Chat({}: Props) {
     // get OCR Raw text from API POST /api/ocr using axios
     const formData = new FormData();
     formData.append('file', submittedFile);
+    setOcrLoading(true);
     fetchAPI({
       method: 'POST',
       url: '/api/ocr',
@@ -45,8 +46,11 @@ export default function Chat({}: Props) {
       .then(({ data }) => {
         setOcrText(data?.data);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error('There was an error translating your document');
+      })
+      .finally(() => {
+        setOcrLoading(false);
       });
   };
 
@@ -113,7 +117,12 @@ export default function Chat({}: Props) {
 
       <div className={'appHeader'}>
         <Typography variant="h4">Upload an image</Typography>
-        <SelectAndFetchDocumentContent handleSelect={handleSelect} ocrText={ocrText} file={file} />
+        <SelectAndFetchDocumentContent
+          handleSelect={handleSelect}
+          ocrText={ocrText}
+          file={file}
+          ocrLoading={ocrLoading}
+        />
       </div>
 
       {/* Chat box */}

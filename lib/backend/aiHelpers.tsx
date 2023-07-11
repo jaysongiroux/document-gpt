@@ -51,7 +51,7 @@ export const askQuestion = async (
   const chatCompletion = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
-      { role: 'system', content: prompt },
+      { role: 'system', content: prompt + ".  If you are unsure of a answer, say 'Sorry, I don't know that' " },
       { role: 'user', content: context },
     ],
   });

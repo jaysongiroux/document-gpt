@@ -11,8 +11,9 @@ const useHasToken = () => {
       url: '/api/hasToken',
     })
       .then((resp) => {
-        setHasToken(true);
-        setSystemHasToken(true);
+        const { data } = resp;
+        setHasToken(data?.data);
+        setSystemHasToken(data?.data);
       })
       .catch(() => {
         setHasToken(false);

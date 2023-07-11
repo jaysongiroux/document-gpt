@@ -7,8 +7,15 @@
 .prefillInput {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   width: 100%;
+  @media screen and (max-width: 500px) {
+    border: 1px solid lightgray;
+    padding: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
 }
 
 .prefilledTextContainer {
@@ -16,6 +23,10 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  margin-top: 24px;
+  @media screen and (max-width: 500px) {
+    align-items: center;
+  }
 }
 
 .inputField {
@@ -30,4 +41,41 @@
   border: 2px solid lightgray;
   padding: 12px;
   border-radius: 12px;
+}
+
+.promptContainer {
+  background-color: rgb(236, 236, 236);
+  border: 2px solid rgb(221, 221, 221);
+  color: rgb(89, 89, 89);
+  padding: 8px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+}
+
+.deleteButton {
+  color: rgb(192, 76, 56);
+  height: 50px;
+  width: 50px;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    height: 50px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 }

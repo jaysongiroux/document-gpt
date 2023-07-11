@@ -8,8 +8,21 @@
   border: 2px solid lightgray;
   border-radius: 12px;
   gap: 12px;
-
   height: 300px;
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    align-items: center;
+
+    .image {
+      width: 100%;
+      height: 250px;
+    }
+    .ocrTextContainer {
+      height: 300px;
+    }
+  }
 }
 
 .image {
@@ -24,6 +37,10 @@
 .ocrTextContainer {
   height: 100%;
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .preTag {
@@ -46,6 +63,14 @@
   border-bottom: 1px solid lightgray;
 }
 
+.navbarHeader {
+  width: 250px;
+  @media screen and (max-width: 400px) {
+    font-size: 22px;
+    width: unset;
+  }
+}
+
 .navBarList {
   display: flex;
   flex-direction: row;
@@ -54,10 +79,13 @@
   gap: 12px;
   list-style: none;
   color: #006f8e;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 // footer
 .footerContainer {
+  margin-top: 100px;
   border-top: 1px solid lightgray;
   width: 100%;
   padding-top: 36px;
@@ -68,24 +96,47 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 .footerLinkList {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 24px;
   list-style: none;
   color: #006f8e;
   padding-inline-start: 0;
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 // Token
+.hasCheck {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.check {
+  color: rgb(99, 136, 99);
+  font-weight: bold;
+}
+
 .token {
   margin-top: 12px;
   margin-bottom: 12px;
-  background-color: #ececec;
   padding: 12px;
-  border: 2px solid rgb(174, 174, 174);
+  // background-color: #ececec;
+  // border: 2px solid rgb(174, 174, 174);
+  border: 2px solid rgb(144, 198, 144);
+  background: rgb(237, 255, 237);
   border-radius: 4px;
 }
 
@@ -101,4 +152,5 @@
   background: rgb(237, 255, 237);
   padding: 12px;
   border-radius: 4px;
+  margin-bottom: 12px;
 }
