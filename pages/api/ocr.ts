@@ -33,15 +33,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.status(400).json({ error: 'No file found' });
   }
 
-  const imageBuffer = await fileToBuffer(file as unknown as File);
-  const text: string = await readTextFromImage(imageBuffer);
+  try {
+    const imageBuffer = await fileToBuffer(file as unknown as File);
+    const text: string = await readTextFromImage(imageBuffer);
 
-  console.log('OCR Finished');
-  res.status(200).json({ data: text });
+    return res.status(200).json({ data: text });
+  } catch (error: any) {
+    console.log('OCR Finished ERROR: ', error);
+    return res.status(500).json({ error: error.message });
+  }
 }
-
-// OCR Started
-// Aborted(Error: ENOENT: no such file or directory, open '/var/task/node_modules/tesseract.js-core/tesseract-core-simd.wasm')
-// Uncaught Exception 	{"errorType":"RuntimeError","errorMessage":"Aborted(Error: ENOENT: no such file or directory, open '/var/task/node_modules/tesseract.js-core/tesseract-core-simd.wasm'). Build with -sASSERTIONS for more info.","stack":["RuntimeError: Aborted(Error: ENOENT: no such file or directory, open '/var/task/node_modules/tesseract.js-core/tesseract-core-simd.wasm'). Build with -sASSERTIONS for more info.","    at n (/var/task/node_modules/tesseract.js-core/tesseract-core-simd.js:18:375)","    at Ua (/var/task/node_modules/tesseract.js-core/tesseract-core-simd.js:19:317)","    at /var/task/node_modules/tesseract.js-core/tesseract-core-simd.js:20:394"]}
-// Unknown application error occurred
-// Runtime.Unknown

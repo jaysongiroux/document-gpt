@@ -79,7 +79,7 @@ export default function Prefill({}: Props) {
       .then(({ data }) => {
         setOcrText(data?.data);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error('Error getting OCR text');
       })
       .finally(() => {
@@ -256,4 +256,3 @@ export default function Prefill({}: Props) {
     </div>
   );
 }
-
