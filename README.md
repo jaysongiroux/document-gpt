@@ -1,7 +1,11 @@
 # Document GPT
-a document toolkit that leverages `tesseract.js` and `openai` to upload a document and process it using different ideas/ techniques.
+A document toolkit that leverages `tesseract.js` and `openai` to upload a document and process it using different ideas/ techniques.
 
 [![Badge](https://202o2716cl9w.runkit.sh)](http://documentgpt.jasongiroux.com)
+
+## Features
+- Given a document, construct a user defined JSON object
+- Given a document, ask questions about it
 
 ## Getting Started
 1. Get an OpenAI API Token
