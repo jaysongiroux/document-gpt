@@ -1,8 +1,12 @@
-import Tesseract from 'tesseract.js';
+import { createWorker } from 'tesseract.js';
 
 export const readTextFromImage = async (file: Buffer) => {
   try {
-    const worker = await Tesseract.createWorker();
+    const worker = await createWorker({
+      logger: (m) => {
+        console.log(m);
+      },
+    });
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
 

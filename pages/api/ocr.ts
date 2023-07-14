@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     res.status(400).json({ error: 'No file found' });
     return;
   }
+
   const file = Array.isArray(files.file) ? files.file[0] : files.file;
 
   if (!file) {
