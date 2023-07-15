@@ -16,8 +16,8 @@ export default function Home() {
           with requested fields, or ask a chatbot questions about that document!
         </Typography>
         <Typography variant="body2">
-          If an environment variable OPEN_AI_API_TOKEN is not defined, the user will need to provide their own. No user
-          data is retained which includes uploaded documents, cookies, or API Tokens.
+          The purpose of this app is to process images of documents with english text. Images of anything but text will
+          not work.
         </Typography>
         <div className={styles.homeButtonContainer}>
           <Button variant="contained" href="/prefill" className={styles.homeActionButton}>

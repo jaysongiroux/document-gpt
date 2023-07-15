@@ -7,7 +7,9 @@ import { uid } from 'uid';
 import { Send } from '@mui/icons-material';
 import useHasToken from '@/hooks/useHasToken';
 import Token from '@/components/Token';
-import { toast } from 'react-toastify';
+import useLocalToken from '@/hooks/useLocalToken';
+import { handleLocalTokenChange } from '@/components/helpers/tokenHelpers';
+import { handleTranslate } from '@/helpers/ocrHelpers';
 
 type Props = {};
 
@@ -28,37 +30,15 @@ export default function Chat({}: Props) {
   const [token, setToken] = React.useState<string | null>(null);
   const [ocrLoading, setOcrLoading] = React.useState<boolean>(false);
   const chatRef = React.useRef<any>(null);
+  const { token: localToken, setLocalToken } = useLocalToken();
 
-  const handleTranslate = async (submittedFile: File) => {
-    if (!submittedFile) return;
-    // get OCR Raw text from API POST /api/ocr using axios
-    const formData = new FormData();
-    formData.append('file', submittedFile);
-    setOcrLoading(true);
-    fetchAPI({
-      method: 'POST',
-      url: '/api/ocr',
-      body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(({ data }) => {
-        setOcrText(data?.data);
-      })
-      .catch(() => {
-        toast.error('There was an error translating your document');
-      })
-      .finally(() => {
-        setOcrLoading(false);
-      });
-  };
+  const APIToken = localToken || token;
 
   const handleSelect = (e: any) => {
     setFile(e.target.files[0]);
 
     if (e.target.files[0]) {
-      handleTranslate(e.target.files[0]);
+      handleTranslate(e.target.files[0], setOcrLoading, setOcrText);
       setChats([]);
     }
   };
@@ -69,6 +49,7 @@ export default function Chat({}: Props) {
     }
     setChats((prev: any) => [...prev, { question, uid: uid() }]);
     setChatLoading(true);
+
     // submit for question
     fetchAPI({
       method: 'POST',
@@ -106,8 +87,8 @@ export default function Chat({}: Props) {
   return (
     <div className={styles.documentChatContainer}>
       <Token
-        setToken={setToken}
-        token={token}
+        setToken={(val) => handleLocalTokenChange(val, setToken, setLocalToken)}
+        token={APIToken}
         hasToken={hasToken}
         setHasToken={setHasToken}
         systemHasToken={systemHasToken}

@@ -1,8 +1,9 @@
 import { TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
 import { Check } from '@mui/icons-material';
+import useLocalToken from '@/hooks/useLocalToken';
 
 type TokenProps = {
   setToken: (token: string) => void;
@@ -13,11 +14,23 @@ type TokenProps = {
 };
 
 const Token = (props: TokenProps) => {
+  const { token: localToken, setLocalToken } = useLocalToken();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setToken(e.target.value);
+  };
+
+  useEffect(() => {
+    if (localToken) {
+      props.setToken(localToken);
+    }
+  }, [localToken]);
+
   if (props.hasToken) {
     return (
       <div className={styles.hasTokenTrue}>
         <Typography variant="h6" className={styles.hasCheck}>
-          <Check className={styles.check}/>
+          <Check className={styles.check} />
           OpenAI API Token
         </Typography>
         <Typography variant="body2">
@@ -42,7 +55,7 @@ const Token = (props: TokenProps) => {
           type="password"
           fullWidth
           value={props.token ?? ''}
-          onChange={(e) => props.setToken(e.target.value)}
+          onChange={handleChange}
           label="OpenAI API Token"
         />
       </div>

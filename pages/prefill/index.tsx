@@ -8,6 +8,9 @@ import useHasToken from '@/hooks/useHasToken';
 import Token from '@/components/Token';
 import { toast } from 'react-toastify';
 import styles from './styles.module.scss';
+import useLocalToken from '@/hooks/useLocalToken';
+import { handleLocalTokenChange } from '@/components/helpers/tokenHelpers';
+import { handleTranslate } from '@/helpers/ocrHelpers';
 
 type Props = {};
 
@@ -60,38 +63,14 @@ export default function Prefill({}: Props) {
   const [generatedJSON, setGeneratedJSON] = React.useState<object | null>(null);
   const { hasToken, setHasToken, systemHasToken } = useHasToken();
   const [token, setToken] = React.useState<string | null>(null);
+  const { token: localToken, setLocalToken } = useLocalToken();
   const [ocrLoading, setOcrLoading] = React.useState<boolean>(false);
-
-  const handleTranslate = async (submittedFile: File) => {
-    if (!submittedFile) return;
-    // get OCR Raw text from API POST /api/ocr using axios
-    const formData = new FormData();
-    formData.append('file', submittedFile);
-    setOcrLoading(true);
-    fetchAPI({
-      method: 'POST',
-      url: '/api/ocr',
-      body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(({ data }) => {
-        setOcrText(data?.data);
-      })
-      .catch(() => {
-        toast.error('Error getting OCR text');
-      })
-      .finally(() => {
-        setOcrLoading(false);
-      });
-  };
 
   const handleSelect = async (e: any) => {
     setFile(e.target.files[0]);
 
     if (e.target.files[0]) {
-      handleTranslate(e.target.files[0]);
+      handleTranslate(e.target.files[0], setOcrLoading, setOcrText);
     }
   };
 
@@ -167,13 +146,15 @@ export default function Prefill({}: Props) {
     return <span style={{ color: 'red' }}>No</span>;
   };
 
+  const APIToken = localToken || token;
+
   const wholePrompt = promptDefault + objectPrompt + additionalPrompt;
 
   return (
     <div className={styles.prefillContainer}>
       <Token
-        setToken={setToken}
-        token={token}
+        setToken={(val) => handleLocalTokenChange(val, setToken, setLocalToken)}
+        token={APIToken}
         hasToken={hasToken}
         setHasToken={setHasToken}
         systemHasToken={systemHasToken}
@@ -214,12 +195,12 @@ export default function Prefill({}: Props) {
                   name="field"
                   label="Field"
                   className={styles.inputField}
-                  value={item.field}
+                  value={item?.field ?? ''}
                   onChange={(e) => handleChange('field', e.target.value, item.uid)}
                 />
                 <Autocomplete
                   options={types}
-                  value={item.type as any}
+                  value={(item?.type as any) ?? ''}
                   className={styles.inputField}
                   onChange={(e, value) => handleChange('type', value?.value, item.uid)}
                   renderInput={(params) => <TextField name="type" {...params} label="Type" />}
