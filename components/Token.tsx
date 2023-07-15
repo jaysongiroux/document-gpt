@@ -24,6 +24,7 @@ const Token = (props: TokenProps) => {
     if (localToken) {
       props.setToken(localToken);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localToken]);
 
   if (props.hasToken) {
