@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import { ToastContainer } from 'react-toastify';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Navbar />
       <Component {...pageProps} />
       <Footer />
+      <Analytics />
     </>
   );
 }
