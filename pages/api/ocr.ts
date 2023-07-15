@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   try {
     const imageBuffer = await fileToBuffer(file as unknown as File);
     const text: string = await readTextFromImage(imageBuffer);
-
+    console.log('OCR Finished');
     return res.status(200).json({ data: text });
   } catch (error: any) {
     console.log('OCR Finished ERROR: ', error);
