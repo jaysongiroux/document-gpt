@@ -1,11 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
 
-// const OPEN_AI_TOKEN_KEY = process.env.OPEN_AI_API_TOKEN;
-// const configuration = new Configuration({
-//   apiKey: OPEN_AI_TOKEN_KEY,
-// });
-// const openai = new OpenAIApi(configuration);
-
 /**
  * Utilizes chat GPT3.5-turbo to parse text into JSON
  * @param {String} text

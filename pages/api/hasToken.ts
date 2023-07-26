@@ -7,7 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     res.status(405).json({ error: 'Method not allowed, please use GET' });
     return;
   }
-  // if process.env.OPEN_AI_API_TOKEN
   if (process.env.OPEN_AI_API_TOKEN) {
     return res.status(200).json({ data: true });
   } else {
