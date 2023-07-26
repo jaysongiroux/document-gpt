@@ -9,12 +9,14 @@ export const handleTranslate = async (
 ) => {
   if (!submittedFile) return;
   // get OCR Raw text from API POST /api/ocr using axios
+
+  const isPDF = submittedFile.type === 'application/pdf';
   const formData = new FormData();
   formData.append('file', submittedFile);
   setOcrLoading(true);
   fetchAPI({
     method: 'POST',
-    url: '/api/ocr',
+    url: isPDF ? '/api/stripPDF' : '/api/ocr',
     body: formData,
     headers: {
       'Content-Type': 'multipart/form-data',

@@ -1,13 +1,12 @@
 import { fileToUint8Array } from '@/lib/backend/files';
 import { getDocument } from 'pdfjs-dist';
-import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
 
 const TOKEN_LIMIT = 2000;
 
 export const stripRawTextFromPDF = async (pdfFile: File): Promise<string> => {
   const fileBuffer = await fileToUint8Array(pdfFile);
 
-  const pdf: PDFDocumentProxy = await getDocument(fileBuffer).promise;
+  const pdf = await getDocument(fileBuffer).promise;
   const content = await pdf.getMetadata().then(function () {
     // get all pages text
     const maxPages = pdf.numPages;
