@@ -34,11 +34,11 @@ export default function Chat({}: Props) {
 
   const APIToken = localToken || token;
 
-  const handleSelect = (e: any) => {
-    setFile(e.target.files[0]);
+  const handleSelect = (e: File) => {
+    setFile(e);
 
-    if (e.target.files[0]) {
-      handleTranslate(e.target.files[0], setOcrLoading, setOcrText);
+    if (e) {
+      handleTranslate(e, setOcrLoading, setOcrText);
       setChats([]);
     }
   };

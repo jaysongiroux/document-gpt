@@ -66,11 +66,11 @@ export default function Prefill({}: Props) {
   const { token: localToken, setLocalToken } = useLocalToken();
   const [ocrLoading, setOcrLoading] = React.useState<boolean>(false);
 
-  const handleSelect = async (e: any) => {
-    setFile(e.target.files[0]);
+  const handleSelect = (e: File): void => {
+    setFile(e);
 
-    if (e.target.files[0]) {
-      handleTranslate(e.target.files[0], setOcrLoading, setOcrText);
+    if (e) {
+      handleTranslate(e, setOcrLoading, setOcrText);
     }
   };
 

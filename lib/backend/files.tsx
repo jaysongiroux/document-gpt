@@ -19,3 +19,8 @@ export const fileToBuffer = async (file: any): Promise<Buffer> => {
     });
   });
 };
+
+export const fileToUint8Array = async (file: any): Promise<Uint8Array> => {
+  const buffer = await fileToBuffer(file);
+  return new Uint8Array(buffer);
+};

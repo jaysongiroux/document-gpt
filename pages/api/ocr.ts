@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { parseForm } from '../../lib/backend/form';
 import { fileToBuffer } from '../../lib/backend/files';
 import { readTextFromImage } from '../../lib/backend/ocrHelpers';
+import { stripRawTextFromPDF } from '@/helpers/pdfHelpers';
 
 type Data = {
   data?: string;
@@ -32,6 +33,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   if (!file) {
     return res.status(400).json({ error: 'No file found' });
+  }
+
+  // if file is pdf
+  if (file?.mimetype === 'application/pdf') {
+    // strip text from pdf file
+    try {
+      const rawText = await stripRawTextFromPDF(file as unknown as File);
+      return res.status(200).json({ data: rawText });
+    } catch (error: any) {
+      console.log('OCR Finished ERROR: ', error);
+      return res.status(500).json({ error: error?.message ?? error });
+    }
+  }
+
+  // if file is not an image, raise an error
+  if (!file?.mimetype?.startsWith('image')) {
+    console.log('OCR Finished ERROR: File is not an image or pdf');
+    return res.status(400).json({ error: 'File is not an image or pdf' });
   }
 
   try {

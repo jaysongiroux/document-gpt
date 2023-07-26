@@ -26,11 +26,11 @@
   align-items: center;
   padding-left: 12px;
   padding-right: 12px;
+  font-family: roboto !important;
 }
 
 .chatBoxChatContainer {
   max-height: 400px;
-
   overflow: scroll;
 }
 
@@ -39,8 +39,8 @@
   margin: 12px;
   width: 100%;
   background-color: lightgray;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
   text-align: right;
 }
 
@@ -49,16 +49,16 @@
   width: 100%;
   margin: 12px;
   background-color: lightblue;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .chatBoxLoading {
   height: 100%;
   margin: 12px;
   background-color: lightBlue;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .chatBoxError {
@@ -67,12 +67,13 @@
   width: 100%;
   background-color: #ffa1a1;
   border: 1px solid rgb(255, 118, 118);
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .chatBoxPreTag {
   padding: 0;
   margin: 0;
   white-space: pre-wrap;
+  font-family: roboto;
 }

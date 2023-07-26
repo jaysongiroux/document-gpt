@@ -10,3 +10,13 @@ a {
   color: #004c65;
   text-decoration: none;
 }
+
+.appContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.appContainerMaxWidth {
+  width: 1200px;
+}

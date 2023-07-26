@@ -38,7 +38,11 @@ export default function App({ Component, pageProps }: AppProps) {
       <Analytics />
       <ToastContainer />
       <Navbar />
-      <Component {...pageProps} />
+      <div className="appContainer">
+        <div className="appContainerMaxWidth">
+          <Component {...pageProps} />
+        </div>
+      </div>
       <Footer />
     </>
   );
