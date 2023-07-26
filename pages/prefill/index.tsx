@@ -224,7 +224,7 @@ export default function Prefill({}: Props) {
         </section>
       )}
 
-      {generatedJSON && (
+      {generatedJSON && ocrText && (
         <div className={styles.generatedContainer}>
           <Typography variant="h4">3. Generated JSON</Typography>
           <Typography variant="body1">

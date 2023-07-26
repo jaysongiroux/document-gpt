@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { Button, Skeleton, Typography } from '../lib/frontend/mui';
+import { Button, Skeleton, Tooltip, Typography } from '../lib/frontend/mui';
 import Image from 'next/image';
-import { Upload } from '@mui/icons-material';
+import { Info, Upload } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import styles from './styles.module.scss';
@@ -13,6 +13,8 @@ type Props = {
   ocrLoading: boolean;
   handleSelect: (e: File) => void;
 };
+
+const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
 
 const SelectAndFetchDocumentContent = (props: Props) => {
   const { ocrText, file, handleSelect } = props;
@@ -45,48 +47,61 @@ const SelectAndFetchDocumentContent = (props: Props) => {
   }, [file]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.contentContainer}>
-        <Typography variant="subtitle1">
-          Select a file to upload and then click the button to fetch the OCR text.
-        </Typography>
+    <>
+      <Typography variant="subtitle1">
+        Select a file to upload and then click the button to fetch the OCR text.
+      </Typography>
+
+      <Tooltip
+        title={
+          <div className={styles.infoContainer}>
+            <Info />
+            <Typography variant="subtitle1">
+              Supported file types:{' '}
+              {ACCEPTED_FILE_TYPES.map((type) =>
+                type.replace('image/', '').replace('application/', '').toUpperCase(),
+              ).join(', ')}
+            </Typography>
+          </div>
+        }
+      >
         <Button variant="contained" component="label" sx={{ marginTop: 1 }}>
           Upload File
           <Upload sx={{ paddingLeft: 1 }} />
-          <input type="file" hidden onChange={handleSelectFile} />
+          <input type="file" hidden onChange={handleSelectFile} accept={ACCEPTED_FILE_TYPES.join(',')} />
         </Button>
-        {file && (
-          <div className={styles.imageRow}>
-            {/* if file is image */}
-            {file.type.includes('image') && (
-              <Image
-                className={styles.image}
-                width={150}
-                height={150}
-                alt="Selected image"
-                src={URL.createObjectURL(file)}
-              />
+      </Tooltip>
+      {file && (
+        <div className={styles.imageRow}>
+          {/* if file is image */}
+          {file.type.includes('image') && (
+            <Image
+              className={styles.image}
+              width={150}
+              height={150}
+              alt="Selected image"
+              src={URL.createObjectURL(file)}
+            />
+          )}
+          {/* if file is pdf */}
+          {file.type.includes('pdf') && renderPDF}
+          <div className={styles.ocrTextContainer}>
+            {props.ocrLoading ? (
+              <>
+                <Skeleton variant="text" height={75} />
+                <Skeleton variant="rectangular" height={118} />
+                <Skeleton variant="rectangular" height={118} />
+              </>
+            ) : (
+              <pre className={styles.preTag}>
+                <Typography variant="h4">OCR Output</Typography>
+                {ocrText}
+              </pre>
             )}
-            {/* if file is pdf */}
-            {file.type.includes('pdf') && renderPDF}
-            <div className={styles.ocrTextContainer}>
-              {props.ocrLoading ? (
-                <>
-                  <Skeleton variant="text" height={75} />
-                  <Skeleton variant="rectangular" height={118} />
-                  <Skeleton variant="rectangular" height={118} />
-                </>
-              ) : (
-                <pre className={styles.preTag}>
-                  <Typography variant="h4">OCR Output</Typography>
-                  {ocrText}
-                </pre>
-              )}
-            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
